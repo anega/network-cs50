@@ -4,11 +4,18 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from .forms import PostForm
 from .models import User
 
 
 def index(request):
-    return render(request, "network/index.html")
+    post_form = PostForm()
+
+    context = {
+        "post_form": post_form
+    }
+
+    return render(request, "network/index.html", context)
 
 
 def login_view(request):
