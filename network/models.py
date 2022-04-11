@@ -11,7 +11,7 @@ class Post(models.Model):
     body = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
-    like = models.ManyToManyField(User, blank=True, null=True, related_name="posts_liked")
+    like = models.ManyToManyField(User, blank=True, related_name="posts_liked")
 
     def __str__(self):
         return f"{self.body[0:15]} {self.author} {self.created_at}"
