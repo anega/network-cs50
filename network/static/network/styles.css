@@ -1,0 +1,11 @@
+.edit-post a:hover .text-secondary {
+    color: black !important;
+}
+
+.post .fa-heart {
+    margin-right: 4px;
+}
+
+.post .fa-heart:hover {
+    cursor: pointer;
+}
