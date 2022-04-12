@@ -1,17 +1,28 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import PostForm
-from .models import User
+from .models import User, Post
 
 
 def index(request):
+    posts = Post.objects.all().order_by("-created_at")
     post_form = PostForm()
 
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            post_form = PostForm(request.POST)
+            if post_form.is_valid():
+                body = post_form.cleaned_data["body"]
+                new_post = Post(author_id=request.user.id, body=body)
+                new_post.save()
+                return HttpResponseRedirect(reverse("index"))
+
     context = {
+        "posts": posts,
         "post_form": post_form
     }
 
