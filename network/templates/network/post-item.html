@@ -1,0 +1,13 @@
+<div class="post card mb-3 py-2">
+    <div class="card-header border-0 bg-transparent">
+        <p class="float-start mb-0"><a href="{% url 'user_profile' post.author.id %}"><b>{{ post.author }}</b></a></p>
+        <p class="edit-post float-end mb-0"><a href="#"><i class="fa-solid fa-pen text-secondary"></i></a></p>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">{{ post.body }}</p>
+    </div>
+    <div class="card-footer border-0 bg-transparent">
+        <p class="float-start mb-0"><i class="fa-regular fa-heart text-danger"></i>0</p>
+        <p class="float-end mb-0 text-secondary">{{ post.created_at }}</p>
+    </div>
+</div>
