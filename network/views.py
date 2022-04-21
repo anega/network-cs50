@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -102,17 +104,17 @@ def user_profile(request, profile_id):
 @require_POST
 @login_required
 def user_follow(request):
-    if request.method == "POST":
-        follow_to_user = request.POST.get("id")
-        action = request.POST.get("action")
-        if follow_to_user and action:
-            try:
-                follow_from_user = User.objects.get(id=request.user.id)
-                if action == "follow":
-                    follow_from_user.following.add(follow_to_user)
-                else:
-                    follow_from_user.following.remove(follow_to_user)
-                return JsonResponse({"status": "ok"})
-            except User.DoesNotExist:
-                return JsonResponse({"status": "error"})
-        return JsonResponse({"status": "error"})
+    data = json.loads(request.body.decode("utf-8"))
+    follow_to_user = data.get("id")
+    action = data.get("action")
+    if follow_to_user and action:
+        try:
+            follow_from_user = User.objects.get(id=request.user.id)
+            if action == "follow":
+                follow_from_user.following.add(follow_to_user)
+            else:
+                follow_from_user.following.remove(follow_to_user)
+            return JsonResponse({"status": "ok"})
+        except User.DoesNotExist:
+            return JsonResponse({"status": "error"})
+    return JsonResponse({"status": "error"})
