@@ -9,7 +9,7 @@
     <div>
         <p>{{ following }} following</p>
         <p class="followers-count">{{ followers }} follower{{ followers|pluralize }}</p>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and not request.user.id == profile_user.id %}
             <a href="{% url 'user_follow' %}" id="follow-btn" class="mb-3 btn btn-outline-primary" data-id="{{ profile_user.id }}"
                data-action="{% if request.user in profile_user.followers.all %}un{% endif %}follow">
                 {% if request.user in profile_user.followers.all %}
