@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from .forms import PostForm
 from .models import User, Post
@@ -79,3 +81,19 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def user_profile(request, profile_id):
+    profile_user = User.objects.get(pk=profile_id)
+    following_count = profile_user.following.count()
+    followers_count = profile_user.followers.count()
+    user_profile_posts = Post.objects.all().filter(author_id=profile_id).order_by("-created_at")
+
+    context = {
+        "profile_user": profile_user,
+        "following": following_count,
+        "followers": followers_count,
+        "posts": user_profile_posts
+    }
+
+    return render(request, "network/profile.html", context)
