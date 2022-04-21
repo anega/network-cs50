@@ -97,3 +97,22 @@ def user_profile(request, profile_id):
     }
 
     return render(request, "network/profile.html", context)
+
+
+@require_POST
+@login_required
+def user_follow(request):
+    if request.method == "POST":
+        follow_to_user = request.POST.get("id")
+        action = request.POST.get("action")
+        if follow_to_user and action:
+            try:
+                follow_from_user = User.objects.get(id=request.user.id)
+                if action == "follow":
+                    follow_from_user.following.add(follow_to_user)
+                else:
+                    follow_from_user.following.remove(follow_to_user)
+                return JsonResponse({"status": "ok"})
+            except User.DoesNotExist:
+                return JsonResponse({"status": "error"})
+        return JsonResponse({"status": "error"})
