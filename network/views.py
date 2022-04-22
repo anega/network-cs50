@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -15,6 +16,9 @@ from .models import User, Post
 def index(request):
     posts = Post.objects.all().order_by("-created_at")
     post_form = PostForm()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -26,7 +30,7 @@ def index(request):
                 return HttpResponseRedirect(reverse("index"))
 
     context = {
-        "posts": posts,
+        "page_obj": page_obj,
         "page_title": "All posts",
         "post_form": post_form
     }
@@ -124,9 +128,12 @@ def user_follow(request):
 @login_required
 def following_posts(request):
     posts = Post.objects.filter(author__followers=request.user).order_by("-created_at")
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        "posts": posts,
+        "page_obj": page_obj,
         "page_title": "Following"
     }
 
