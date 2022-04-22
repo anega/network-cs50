@@ -27,6 +27,7 @@ def index(request):
 
     context = {
         "posts": posts,
+        "page_title": "All posts",
         "post_form": post_form
     }
 
@@ -118,3 +119,15 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({"status": "error"})
     return JsonResponse({"status": "error"})
+
+
+@login_required
+def following_posts(request):
+    posts = Post.objects.filter(author__followers=request.user).order_by("-created_at")
+
+    context = {
+        "posts": posts,
+        "page_title": "Following"
+    }
+
+    return render(request, "network/index.html", context)
