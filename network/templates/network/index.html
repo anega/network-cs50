@@ -1,8 +1,8 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <h2>All posts</h2>
-    {% if user.is_authenticated %}
+    <h2>{{ page_title }}</h2>
+    {% if user.is_authenticated and post_form %}
         <div class="card mb-3">
             <div class="card-body">
                 <h5>New post</h5>
