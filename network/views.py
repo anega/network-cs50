@@ -138,3 +138,21 @@ def following_posts(request):
     }
 
     return render(request, "network/index.html", context)
+
+
+@login_required
+@require_POST
+def edit_post(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+        if request.user.id == post.author_id:
+            data = json.loads(request.body.decode("utf-8"))
+            new_post_body = data.get("post_body")
+            if post.body != new_post_body:
+                post.body = new_post_body
+                post.save()
+            return JsonResponse({"status": "ok"})
+        else:
+            return JsonResponse({"status": "error"})
+    except Post.DoesNotExist:
+        return JsonResponse({"status": "error"})
