@@ -54,6 +54,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
         })
     }
+
+    // Edit post
+    const editPostBtnList = document.querySelectorAll('.edit-post-btn')
+    if (editPostBtnList.length) {
+        editPostBtnList.forEach(editPostBtn => {
+            editPostBtn.addEventListener('click', (event) => {
+                event.preventDefault()
+                const editTargetBtn = event.currentTarget
+                editTargetBtn.style.display = 'none'
+                editTargetBtn.parentNode.querySelector('.save-post-btn').style.display = 'inline'
+                editTargetBtn.parentNode.querySelector('.cancel-post-btn').style.display = 'inline'
+                const postContentWrap = editTargetBtn.closest('.post').querySelector('.post-body')
+                postContentWrap.querySelector('.post-body-content').style.display = 'none'
+                const postContent = postContentWrap.querySelector('.post-body-content-editable')
+                postContent.style.display = 'block'
+                postContent.focus()
+            })
+        })
+    }
+
+    // Save post
+    const savePostBtnList = document.querySelectorAll('.save-post-btn')
+    if (savePostBtnList.length) {
+        savePostBtnList.forEach(saveBtn => {
+            saveBtn.addEventListener('click', (event) => {
+                event.preventDefault()
+                const saveBtnTarget = event.currentTarget
+                saveBtnTarget.style.display = 'none'
+                saveBtnTarget.parentNode.querySelector('.cancel-post-btn').style.display = 'none'
+                saveBtnTarget.parentNode.querySelector('.edit-post-btn').style.display = 'inline'
+                const postContentWrap = saveBtnTarget.closest('.post').querySelector('.post-body')
+                const updatedBodyText = postContentWrap.querySelector('.post-body-content-editable').value
+                console.log(updatedBodyText)
+            })
+        })
+    }
+
+    // Cancel post editing
+    const cancelPostBtnList = document.querySelectorAll('.cancel-post-btn')
+    if (cancelPostBtnList.length) {
+        cancelPostBtnList.forEach(cancelBtn => {
+            cancelBtn.addEventListener('click', event => {
+                event.preventDefault()
+                const cancelTargetBtn = event.currentTarget
+                cancelTargetBtn.style.display = 'none'
+                cancelTargetBtn.parentNode.querySelector('.save-post-btn').style.display = 'none'
+                cancelTargetBtn.parentNode.querySelector('.edit-post-btn').style.display = 'inline'
+                const postContentWrap = cancelTargetBtn.closest('.post').querySelector('.post-body')
+                postContentWrap.querySelector('.post-body-content-editable').style.display = 'none'
+                postContentWrap.querySelector('.post-body-content').style.display = 'block'
+            })
+        })
+    }
 })
 
 function getCookie(name) {
