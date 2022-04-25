@@ -9,3 +9,22 @@
 .post .fa-heart:hover {
     cursor: pointer;
 }
+
+.post-body-content {
+    padding: 6px 9px 1px;
+}
+
+.post-body-content-editable {
+    display: none;
+    box-sizing: border-box;
+    padding: 5px 8px 0;
+    width: 100%;
+}
+
+.edit-post a {
+    text-decoration: none;
+}
+
+.save-post-btn {
+    margin-right: 12px;
+}
