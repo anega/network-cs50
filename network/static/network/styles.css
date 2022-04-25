@@ -10,6 +10,21 @@
     cursor: pointer;
 }
 
+.post-body {
+    position: relative;
+}
+
+.post-save-notification {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    color: white;
+    padding: 12px 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .post-body-content {
     padding: 6px 9px 1px;
 }
