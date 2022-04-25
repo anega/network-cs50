@@ -3,15 +3,21 @@
         <p class="float-start mb-0"><a href="{% url 'user_profile' post.author.id %}"><b>{{ post.author }}</b></a></p>
         {% if request.user.id == post.author.id %}
             <p class="edit-post float-end mb-0">
-                <a class="edit-post-btn" href="{% url 'edit_post' post.id %}"><i
-                        class="fa-solid fa-pen text-secondary"></i></a>
-                <a class="save-post-btn" href="{% url 'edit_post' post.id %}" style="display: none;"><i
-                        class="fa-solid fa-floppy-disk text-secondary"></i></a>
+                <a class="edit-post-btn" href="{% url 'edit_post' post.id %}">
+                    <i class="fa-solid fa-pen text-primary"></i>
+                </a>
+                <a class="save-post-btn" href="{% url 'edit_post' post.id %}" style="display: none;">
+                    <i class="fa-solid fa-floppy-disk text-success"></i>
+                </a>
+                <a class="cancel-post-btn" href="" style="display: none">
+                    <i class="fa-solid fa-xmark text-danger"></i>
+                </a>
             </p>
         {% endif %}
     </div>
     <div class="card-body post-body">
-        <p class="mb-0">{{ post.body }}</p>
+        <p class="mb-0 post-body-content">{{ post.body }}</p>
+        <textarea class="post-body-content-editable form-control">{{ post.body }}</textarea>
     </div>
     <div class="card-footer border-0 bg-transparent">
         <p class="float-start mb-0"><i class="fa-regular fa-heart text-danger"></i>0</p>
