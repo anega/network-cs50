@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error()
                 })
                 .then(data => {
-                    console.log(data)
                     if (data['status'] === 'ok') {
                         targetLink.dataset.action = followAction === 'follow' ? 'unfollow' : 'follow'
                         targetLink.innerHTML = followAction === 'follow' ? 'Unfollow' : 'Follow'
@@ -86,7 +85,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveBtnTarget.parentNode.querySelector('.edit-post-btn').style.display = 'inline'
                 const postContentWrap = saveBtnTarget.closest('.post').querySelector('.post-body')
                 const updatedBodyText = postContentWrap.querySelector('.post-body-content-editable').value
-                console.log(updatedBodyText)
+                postContentWrap.querySelector('.post-body-content').textContent = updatedBodyText
+                postContentWrap.querySelector('.post-body-content-editable').style.display = 'none'
+                postContentWrap.querySelector('.post-body-content').style.display = 'block'
+
+                const csrfToken = getCookie('csrftoken')
+                const url = saveBtnTarget.href
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        post_body: updatedBodyText
+                    })
+                })
+                    .then(response => {
+                        if (response.ok) return response.json()
+                        throw new Error()
+                    })
+                    .then(data => {
+                        if (data['status'] === 'ok') {
+                            const notificationElement = document.createElement('p')
+                            notificationElement.classList.add('post-save-notification')
+                            notificationElement.innerHTML = 'The Post have been updated'
+                            postContentWrap.append(notificationElement)
+                            setTimeout(() => {
+                                postContentWrap.removeChild(notificationElement)
+                            }, 2000)
+                        } else if (data['status'] === 'error') throw new Error()
+                    })
+                    .catch(error => console.log(error + '. Something went wrong. Please try again later.'))
             })
         })
     }
