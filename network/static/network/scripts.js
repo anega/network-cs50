@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }, 2000)
                         } else if (data['status'] === 'error') throw new Error()
                     })
-                    .catch(error => console.log(error + '. Something went wrong. Please try again later.'))
+                    .catch(error => console.log(`${error} Something went wrong. Please try again later.`))
             })
         })
     }
@@ -137,6 +137,41 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         })
     }
+
+    // Like post
+    const likePostBtnList = document.querySelectorAll('.like-post-btn')
+    likePostBtnList.forEach(likePostBtn => {
+        likePostBtn.addEventListener('click', event => {
+            event.preventDefault()
+            const likeTargetBtn = event.currentTarget
+            const csrfToken = getCookie('csrftoken')
+            const url = likeTargetBtn.href
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.ok) return response.json()
+                    throw new Error()
+                })
+                .then(data => {
+                    if (data['status'] === 'ok') {
+                        if (data['action'] === 'like') {
+                            likeTargetBtn.querySelector('.fa-heart').classList.remove('fa-regular')
+                            likeTargetBtn.querySelector('.fa-heart').classList.add('fa-solid')
+                        } else if (data['action'] === 'unlike') {
+                            likeTargetBtn.querySelector('.fa-heart').classList.remove('fa-solid')
+                            likeTargetBtn.querySelector('.fa-heart').classList.add('fa-regular')
+                        }
+                        likeTargetBtn.parentNode.querySelector('.likes-count').innerHTML = data["likes_count"]
+                    }
+                })
+                .catch(error => console.log(`${error} Something went wrong. Please try again later.`))
+        })
+    })
 })
 
 function getCookie(name) {
