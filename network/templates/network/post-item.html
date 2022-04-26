@@ -20,7 +20,20 @@
         <textarea class="post-body-content-editable form-control">{{ post.body }}</textarea>
     </div>
     <div class="card-footer border-0 bg-transparent">
-        <p class="float-start mb-0"><i class="fa-regular fa-heart text-danger"></i>0</p>
+        <p class="float-start mb-0">
+            {% if user.is_authenticated %}
+                <a href="{% url 'like_post' post.id %}" class="like-post-btn">
+                    {% if post in user.posts_liked.all %}
+                        <i class="fa-solid fa-heart text-danger"></i>
+                    {% else %}
+                        <i class="fa-regular fa-heart text-danger"></i>
+                    {% endif %}
+                </a>
+            {% else %}
+                <i class="fa-solid fa-heart text-danger"></i>
+            {% endif %}
+            <span class="likes-count">{{ post.like.all.count }}</span>
+        </p>
         <p class="float-end mb-0 text-secondary">{{ post.created_at }}</p>
     </div>
 </div>
