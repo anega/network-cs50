@@ -156,3 +156,22 @@ def edit_post(request, post_id):
             return JsonResponse({"status": "error"})
     except Post.DoesNotExist:
         return JsonResponse({"status": "error"})
+
+
+@login_required
+@require_POST
+def like_post(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+        current_user = User.objects.get(id=request.user.id)
+        if post not in current_user.posts_liked.all():
+            action = "like"
+            post.like.add(current_user)
+        else:
+            action = "unlike"
+            post.like.remove(current_user)
+
+        likes_count = post.like.count()
+        return JsonResponse({"status": "ok", "action": action, "likes_count": likes_count})
+    except Post.DoesNotExist or User.DoesNotExist:
+        return JsonResponse({"status": "error"})
