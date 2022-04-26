@@ -43,3 +43,7 @@
 .save-post-btn {
     margin-right: 12px;
 }
+
+.like-post-btn {
+    text-decoration: none;
+}
