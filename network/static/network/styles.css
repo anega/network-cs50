@@ -47,3 +47,11 @@
 .like-post-btn {
     text-decoration: none;
 }
+
+.card-footer i {
+    cursor: default !important;
+}
+
+.card-footer a i {
+    cursor: pointer !important;
+}
