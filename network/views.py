@@ -95,12 +95,15 @@ def user_profile(request, profile_id):
     following_count = profile_user.following.count()
     followers_count = profile_user.followers.count()
     user_profile_posts = Post.objects.all().filter(author_id=profile_id).order_by("-created_at")
+    paginator = Paginator(user_profile_posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
         "profile_user": profile_user,
         "following": following_count,
         "followers": followers_count,
-        "posts": user_profile_posts
+        "page_obj": page_obj
     }
 
     return render(request, "network/profile.html", context)

@@ -20,7 +20,55 @@
             </a>
         {% endif %}
     </div>
-    {% for post in posts %}
+    {% for post in page_obj %}
         {% include "network/post-item.html" %}
+    {% empty %}
+        <p>No posts yet</p>
     {% endfor %}
+
+    {% if page_obj and page_obj.paginator.num_pages > 1 %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item{% if not page_obj.has_previous %} disabled{% endif %}">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo; First</span>
+                    </a>
+                </li>
+                <li class="page-item{% if not page_obj.has_previous %} disabled{% endif %}">
+                    <a class="page-link"
+                       href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% endif %}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% if page_obj.number|add:'-4' > 1 %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a>
+                    </li>
+                {% endif %}
+                {% for curr_page in page_obj.paginator.page_range %}
+                    <li class="page-item{% if page_obj.number == curr_page %} active{% endif %}">
+                        <a class="page-link" href="?page={{ curr_page }}">{{ curr_page }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a>
+                    </li>
+                {% endif %}
+                <li class="page-item{% if not page_obj.has_next %} disabled{% endif %}">
+                    <a class="page-link"
+                       href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% endif %}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item{% if not page_obj.has_next %} disabled{% endif %}">
+                    <a class="page-link"
+                       href="?page={% if page_obj.has_next %}{{ page_obj.paginator.num_pages }}{% endif %}"
+                       aria-label="Last">
+                        <span aria-hidden="true">Last &raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}
